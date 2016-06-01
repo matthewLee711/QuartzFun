@@ -28,11 +28,11 @@ public class QuartzTest {
             sched.start();
 
             //Create a job for which Execute will check.
-            JobDetail jobSimple = JobBuilder
-                    .newJob(HelloJob.class)
-                    .withIdentity("HelloJobRepeated", "group1")
-                    .usingJobData("DESCRIPTION", "Simple Job")//This is grabbed and displayed as text 
-                    .build();
+            //JobDetail jobSimple = JobBuilder
+            //        .newJob(HelloJob.class)
+            //        .withIdentity("HelloJobRepeated", "group1")
+            //        .usingJobData("DESCRIPTION", "Simple Job")//This is grabbed and displayed as text 
+            //        .build();
             
             //Create the timer for jobSimple. Right above^^
             //Run every 5 seconds using the schedule builder
@@ -44,7 +44,28 @@ public class QuartzTest {
                             .withIntervalInSeconds(5).repeatForever())
                     .build();
 
-            sched.scheduleJob(jobSimple, simpleTrigger);
+            //sched.scheduleJob(jobSimple, simpleTrigger);
+            
+            //MailUtil Job setup!
+            JobDetail jobMail = JobBuilder
+            		.newJob(MailUtil.class)
+                    .withIdentity("HelloJobScheduler", "group1")
+                    .usingJobData("DESCRIPTION", "Cron Job")
+                    .usingJobData("SMTPSERVER", "localhost")
+            		.usingJobData("TO", "matthew_lee2@homedepot.com")
+            		.usingJobData("FROM", "matthew_lee2@homedepot.com")
+            		.usingJobData("SUBJECT", "A message from an SMTP server1212!")
+            		.usingJobData("TEXT", "Yay")
+                    .build();
+            
+            Trigger mailTrigger = TriggerBuilder
+                    .newTrigger()
+                    .withIdentity("HelloTimed", "group1")
+                    .withSchedule(
+                            CronScheduleBuilder.cronSchedule("0/10 * * * * ?"))
+                    .build();
+
+            sched.scheduleJob(jobMail, mailTrigger);
             
             
 
@@ -56,8 +77,8 @@ public class QuartzTest {
                     .usingJobData("SMTPSERVER", "localhost")
             		.usingJobData("TO", "matthew_lee2@homedepot.com")
             		.usingJobData("FROM", "matthew_lee2@homedepot.com")
-            		.usingJobData("SUBJECT", "erwerw")
-            		.usingJobData("TEXT", "yup")
+            		.usingJobData("SUBJECT", "A message from an SMTP server!")
+            		.usingJobData("TEXT", "I")
                     .build();
 
             //Run every 10 seconds using Cron style^^^ scheduling for jobDetail jobcron 

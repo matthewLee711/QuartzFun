@@ -35,7 +35,7 @@ public class HelloJob implements Job {
                             context.getJobDetail().getJobDataMap().getString("DESCRIPTION") +
                             "  The current time is: " + df.format(Calendar.getInstance().getTime()));
             
-            //Send Mail Repeatedly from jobcron
+            //Send Mail Repeatedly 
             sendMail(context.getJobDetail().getJobDataMap().getString("SMTPSERVER"),
             		context.getJobDetail().getJobDataMap().getString("TO"),
             		context.getJobDetail().getJobDataMap().getString("FROM"),

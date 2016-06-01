@@ -13,7 +13,45 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class MailUtil {
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class MailUtil implements Job{
+	private static final Logger LOGGER = LoggerFactory.getLogger(HelloJob.class);
+    private static final DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    
+    //Executes mailJob
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+
+        try {
+
+            Thread.sleep(5000);
+
+            LOGGER.info(
+                    "Hi!  I did this because I am a " +
+                            context.getJobDetail().getJobDataMap().getString("SMTPSERVER") +
+                            "  The current time is: " + df.format(Calendar.getInstance().getTime()));
+            
+            sendMail(context.getJobDetail().getJobDataMap().getString("SMTPSERVER"),
+            		context.getJobDetail().getJobDataMap().getString("TO"),
+            		context.getJobDetail().getJobDataMap().getString("FROM"),
+            		context.getJobDetail().getJobDataMap().getString("SUBJECT"),
+            		context.getJobDetail().getJobDataMap().getString("TEXT"));
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    }
 
     public static void sendMail(
             String smtpServer,
