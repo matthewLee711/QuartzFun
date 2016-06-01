@@ -31,7 +31,7 @@ public class QuartzTest {
             JobDetail jobSimple = JobBuilder
                     .newJob(HelloJob.class)
                     .withIdentity("HelloJobRepeated", "group1")
-                    .usingJobData("DESCRIPTION", "Simple Job")//This is grabbed. 
+                    .usingJobData("DESCRIPTION", "Simple Job")//This is grabbed and displayed as text 
                     .build();
             
             //Create the timer for jobSimple. Right above^^
@@ -45,13 +45,19 @@ public class QuartzTest {
                     .build();
 
             sched.scheduleJob(jobSimple, simpleTrigger);
-
+            
+            
 
             //Create a job for which Execute will check
             JobDetail jobCron = JobBuilder
                     .newJob(HelloJob.class)
                     .withIdentity("HelloJobScheduled", "group1")
                     .usingJobData("DESCRIPTION", "Cron Job")
+                    .usingJobData("SMTPSERVER", "localhost")
+            		.usingJobData("TO", "matthew_lee2@homedepot.com")
+            		.usingJobData("FROM", "matthew_lee2@homedepot.com")
+            		.usingJobData("SUBJECT", "erwerw")
+            		.usingJobData("TEXT", "yup")
                     .build();
 
             //Run every 10 seconds using Cron style^^^ scheduling for jobDetail jobcron 
@@ -70,7 +76,7 @@ public class QuartzTest {
             try{
                 MailUtil.sendMail(
                     "localhost",
-                    "CHRISTOPHER_CHANEY@homedepot.com",
+                    "matthew_lee2@homedepot.com",
                     "matthew_lee2@homedepot.com",
                     "test message",
                     "This is a test of the emergency email system! From Quartz!!");

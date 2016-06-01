@@ -1,5 +1,8 @@
 package quartzfun;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -9,8 +12,6 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import org.quartz.Job;
 
 public class MailUtil {
 
