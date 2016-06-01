@@ -14,7 +14,8 @@ public class HelloJob implements Job {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloJob.class);
     private static final DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-
+    //Execute runs first and it activates every 5 seconds
+    //When it is activated, it then goes to the context and gets the job detail.
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
         try {

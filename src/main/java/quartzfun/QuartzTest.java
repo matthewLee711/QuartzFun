@@ -1,5 +1,8 @@
 package quartzfun;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -24,13 +27,14 @@ public class QuartzTest {
             Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
             sched.start();
 
-
+            //Create a job for which Execute will check.
             JobDetail jobSimple = JobBuilder
                     .newJob(HelloJob.class)
                     .withIdentity("HelloJobRepeated", "group1")
-                    .usingJobData("DESCRIPTION", "Simple Job")
+                    .usingJobData("DESCRIPTION", "Simple Job")//This is grabbed. 
                     .build();
-
+            
+            //Create the timer for jobSimple. Right above^^
             //Run every 5 seconds using the schedule builder
             Trigger simpleTrigger = TriggerBuilder
                     .newTrigger()
@@ -43,14 +47,14 @@ public class QuartzTest {
             sched.scheduleJob(jobSimple, simpleTrigger);
 
 
-
+            //Create a job for which Execute will check
             JobDetail jobCron = JobBuilder
                     .newJob(HelloJob.class)
                     .withIdentity("HelloJobScheduled", "group1")
                     .usingJobData("DESCRIPTION", "Cron Job")
                     .build();
 
-            //Run every 10 seconds using Cron style scheduling
+            //Run every 10 seconds using Cron style^^^ scheduling for jobDetail jobcron 
             //http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html
             Trigger cronTrigger = TriggerBuilder
                     .newTrigger()
@@ -60,22 +64,23 @@ public class QuartzTest {
                     .build();
 
             sched.scheduleJob(jobCron, cronTrigger);
-
+            
+            //TO run this, create server, install and configure PostFix on linux as
             //You need to use a host other than localhost if you are not running a local SMTP server
-//            try{
-//                MailUtil.sendMail(
-//                    "localhost",
-//                    "email@email.com",
-//                    "email@email.com",
-//                    "test message",
-//                    "This is a test of the emergency email system!");
-//            }  catch (AddressException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            } catch (MessagingException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
+            try{
+                MailUtil.sendMail(
+                    "localhost",
+                    "CHRISTOPHER_CHANEY@homedepot.com",
+                    "matthew_lee2@homedepot.com",
+                    "test message",
+                    "This is a test of the emergency email system! From Quartz!!");
+            }  catch (AddressException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (MessagingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
 //            LOGGER.info("Shutting down scheduler...");
 //            sched.shutdown();
